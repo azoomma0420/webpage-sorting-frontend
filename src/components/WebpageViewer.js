@@ -7,6 +7,7 @@ import axios from 'axios';
 
 function WebpageViewer() {
     const [url, setUrl] = useState('')
+    const [unit, setUnit] = useState(100)
     const [result, setResult] = useState('')
     const [quotient, setQuotient] = useState('Quotient: ')
     const [remainder, setRemainder] = useState('Remainder: ')
@@ -21,13 +22,34 @@ function WebpageViewer() {
         setUrl(e.target.value)
     }
 
+    const handleInputUnit = (e) => {
+        setUnit(e.target.value)
+    }
+
     const onClickOriginal = () => {
         axios.get('http://localhost:8080/data', {
             params: {
-                'url': url
+                'url': url,
+                'includeHTML': isChecked
             }
         })
         .then(res => setResult(res.data))
+        .catch()
+    }
+
+    const onClickOutputPerUnit = () => {
+        axios.get('http://localhost:8080/data-per-unit', {
+            params: {
+                'url': url,
+                'unit': unit,
+                'includeHTML': isChecked
+            }
+        })
+        .then(res => {
+            setQuotient(res.data.quotient)
+            setRemainder(res.data.remainder)
+            setResult(res.data.result)
+        })
         .catch()
     }
 
@@ -40,7 +62,7 @@ function WebpageViewer() {
                   <Form.Control type="text" placeholder="Enter URL" onChange={handleInputURL} />
                 </Form.Group>
                 <Form.Group as={Col} controlId="formUnit">
-                  <Form.Control type="text" placeholder="Enter natural number (unit)" />
+                  <Form.Control type="text" placeholder="Enter natural number (default 100)" onChange={handleInputUnit} />
                 </Form.Group>
               </Row>
               <Row className="mb-3">
@@ -51,16 +73,7 @@ function WebpageViewer() {
                     <Button variant="secondary" type="button" onClick={onClickOriginal}>Original</Button>
                 </Form.Group>
                 <Form.Group as={Col} className="mb-3">
-                    <Button variant="secondary" type="button">Only Alphabet and Number</Button>
-                </Form.Group>
-                <Form.Group as={Col} className="mb-3">
-                    <Button variant="secondary" type="button">Ascending</Button>
-                </Form.Group>
-                <Form.Group as={Col} className="mb-3">
-                    <Button variant="secondary" type="button">Cross Output</Button>
-                </Form.Group>
-                <Form.Group as={Col} className="mb-3">
-                    <Button variant="secondary" type="button">Output per Unit</Button>
+                    <Button variant="secondary" type="button" onClick={onClickOutputPerUnit}>Output per Unit</Button>
                 </Form.Group>
               </Row>
               <Row className="mb-3">
