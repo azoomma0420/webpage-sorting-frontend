@@ -8,9 +8,11 @@ import axios from 'axios';
 function WebpageViewer() {
     const [url, setUrl] = useState('')
     const [unit, setUnit] = useState(100)
-    const [result, setResult] = useState('')
-    const [quotient, setQuotient] = useState('Quotient: ')
-    const [remainder, setRemainder] = useState('Remainder: ')
+    const [quotient, setQuotient] = useState('Quotient String:')
+    const [remainder1, setRemainder1] = useState('Remainder String1:')
+    const [remainder2, setRemainder2] = useState('Remainder String2:')
+    const [quotientN, setQuotientN] = useState('Quotient Number: ')
+    const [remainderN, setRemainderN] = useState('Remainder Number: ')
     const [isChecked, setIsChecked] = useState(true)
 
     const handleChecked = (e) => {
@@ -33,7 +35,7 @@ function WebpageViewer() {
                 'includeHTML': isChecked
             }
         })
-        .then(res => setResult(res.data))
+        .then(res => setQuotient(res.data))
         .catch()
     }
 
@@ -47,8 +49,10 @@ function WebpageViewer() {
         })
         .then(res => {
             setQuotient(res.data.quotient)
-            setRemainder(res.data.remainder)
-            setResult(res.data.result)
+            setRemainder1(res.data.remainder1)
+            setRemainder2(res.data.remainder2)
+            setQuotientN(res.data.quotientN)
+            setRemainderN(res.data.remainderN)
         })
         .catch()
     }
@@ -78,14 +82,22 @@ function WebpageViewer() {
               </Row>
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="formQuotient">
-                  <Form.Control type="text" value={quotient} disabled />
+                  <Form.Control type="text" value={quotientN} disabled />
                 </Form.Group>
                 <Form.Group as={Col} controlId="formRemainder">
-                  <Form.Control type="text" value={remainder} disabled />
+                  <Form.Control type="text" value={remainderN} disabled />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="ControlTextarea1">
                     <Form.Label></Form.Label>
-                    <Form.Control as="textarea" rows={15} value={result} disabled />
+                    <Form.Control as="textarea" rows={5} value={quotient} disabled />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="ControlTextarea2">
+                    <Form.Label></Form.Label>
+                    <Form.Control as="textarea" rows={5} value={remainder1} disabled />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="ControlTextarea3">
+                    <Form.Label></Form.Label>
+                    <Form.Control as="textarea" rows={5} value={remainder2} disabled />
                 </Form.Group>
               </Row>
             </Form>
